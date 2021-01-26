@@ -1,6 +1,6 @@
 ---
 title: "Assignment 1: Introduction"
-author: "Student Name"
+author: "Andrea Gonzalez Natera"
 output: pdf_document
 geometry: margin=2.54cm
 ---
@@ -22,15 +22,15 @@ The completed exercise is due on <>.
 
 1. What are your previous experiences with data analytics, R, and Git? Include both formal and informal training.
 
-> Answer: 
+> Answer: I took John's Advance GIS class last semester which covered a bit of Git and Python. My experience using R conisist of Betsy's Stats class.
 
 2. Are there any components of the course about which you feel confident?
 
-> Answer: 
+> Answer: I feel comfortable with the material covered by my stats class such as GLM and ANOVAs.
 
 3. Are there any components of the course about which you feel apprehensive?
 
-> Answer: 
+> Answer: Not so much a component just the workload and time management in general. 
 
 
 ## 2) GitHub
