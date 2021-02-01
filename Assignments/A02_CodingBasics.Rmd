@@ -73,6 +73,7 @@ sPassed
 
 
 6. Label each vector with a comment on what type of vector it is.
+Answer: See above
 
 7. Combine each of the vectors into a data frame. Assign the data frame an informative name.
 ```{r}
@@ -93,19 +94,25 @@ TestResults
 
 10. Create a function with an if/else statement. Your function should determine whether a test score is a passing grade of 50 or above (TRUE or FALSE). You will need to choose either the `if` and `else` statements or the `ifelse` statement. Hint: Use `print`, not `return`. The name of your function should be informative.
 ```{R}
-PassFail <- function(x){
+PassFailIfElse <- function(x){
   ifelse(x>50,TRUE,FALSE)
-  }
+}
+PassFailIf <- function(x) {
+  if (x[1]>50 & x[2]>50 & x[3]>50 & x[4]>50) {c(TRUE,TRUE,TRUE,TRUE)} else {c(x[1]>10000,x[2]>50,x[3]>50,x[4]>50)}
+}
 
 ```
 
 11. Apply your function to the vector with test scores that you created in number 5. 
 
 ```{r}
-Results <- as.data.frame(PassFail(sScore))
-Results
+StudentPassedIfElse <- as.data.frame(PassFailIfElse(sScore))
+StudentPassedIfElse
+StudentPassedIf <- as.data.frame(PassFailIf(sScore))
+StudentPassedIf
+
 ```
 
 12. QUESTION: Which option of `if` and `else` vs. `ifelse` worked? Why?
 
-> Answer: I used ifelse and it worked because it evaluates every vector item, if I try to use if and else I get an error saying that only the first element in the condition will be used. 
+> Answer: I think ifelse worked better because it evaluated the every item in the vector, in the 'ife' and 'else' example I had to input multiple conditions so that the lenght would be bigger than 1, in this case that all of the grades where above 50, and in the else statment I simply asked it to return a vectors whose values where the logic result of that item in the vector's relationship with 50 (bigger = TRUE, smaller = False) This is not an elegant solutions and in terms of time it is the same as creating a logistical vector>: c(TestResults$Score > 50) 
