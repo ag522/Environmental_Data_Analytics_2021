@@ -98,7 +98,7 @@ PassFailIfElse <- function(x){
   ifelse(x>50,TRUE,FALSE)
 }
 PassFailIf <- function(x) {
-  if (x[1]>50 & x[2]>50 & x[3]>50 & x[4]>50) {c(TRUE,TRUE,TRUE,TRUE)} else {c(x[1]>10000,x[2]>50,x[3]>50,x[4]>50)}
+  if (x[1]>50 & x[2]>50 & x[3]>50 & x[4]>50) {c(TRUE,TRUE,TRUE,TRUE)} else {c(x[1]>50,x[2]>50,x[3]>50,x[4]>50)}
 }
 
 ```
