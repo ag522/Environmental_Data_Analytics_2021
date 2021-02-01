@@ -24,6 +24,7 @@ This exercise accompanies the lessons in Environmental Data Analytics on coding 
 
 1. Generate a sequence of numbers from one to 100, increasing by fours. Assign this sequence a name.
 ```{r}
+#1. I created a sequence from 1 to 100 in intervals of 4  using the seq() function and called this Seq1
 Seq1 <- seq(1,100,4)
 Seq1
 ```
@@ -31,12 +32,14 @@ Seq1
 
 2. Compute the mean and median of this sequence. 
 ```{r}
+#2. Used the mean() and median() functions on Seq1 
 mean(Seq1)
 median(Seq1)
 ```
 
 3. Ask R to determine whether the mean is greater than the median. 
 ``` {R}
+#3. Determined if mean of Seq1 was bigger than median by using the > sign
 mean(Seq1)>median(Seq1)
 ```
 
