@@ -38,7 +38,7 @@ median(Seq1)
 ```
 
 3. Ask R to determine whether the mean is greater than the median. 
-``` {R}
+``` {r}
 #3. Determined if mean of Seq1 was bigger than median by using the > sign
 mean(Seq1)>median(Seq1)
 ```
@@ -57,20 +57,25 @@ mean(Seq1)>median(Seq1)
 ## Basics Day 2
 
 5. Create a series of vectors, each with four components, consisting of (a) names of students, (b) test scores out of a total 100 points, and (c) whether or not they have passed the test (TRUE or FALSE) with a passing grade of 50.
-``` {R}
+``` {r}
 sName <- c('Ale','Sabine','Mariana','Andrea')
 #sName is a character vector
+sName
 sScore <- c(90,85,50,95)
+sScore
 #sScore is a numeric vector
 sPassed <- c(TRUE,TRUE,FALSE,TRUE)
+sPassed
 #sPassed is a logical vector
 
 ```
 
+
+
 6. Label each vector with a comment on what type of vector it is.
 
 7. Combine each of the vectors into a data frame. Assign the data frame an informative name.
-```{R}
+```{r}
 TestResults <- data.frame(sName,sScore,sPassed)
 TestResults
 ```
@@ -80,6 +85,7 @@ TestResults
 TestResults <- data.frame(Name = sName, Score = sScore, Result = sPassed)
 TestResults
 ```
+
 
 9. QUESTION: How is this data frame different from a matrix?
 
@@ -96,7 +102,8 @@ PassFail <- function(x){
 11. Apply your function to the vector with test scores that you created in number 5. 
 
 ```{r}
-PassFail(sScore)
+Results <- as.data.frame(PassFail(sScore))
+Results
 ```
 
 12. QUESTION: Which option of `if` and `else` vs. `ifelse` worked? Why?
