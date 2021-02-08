@@ -93,19 +93,51 @@ Question: In the R chunk below, write "dataframe1$". Press `tab` after you type 
 Find a ten-day forecast of temperatures (Fahrenheit) for Durham, North Carolina. Create two vectors, one representing the high temperature on each of the ten days and one representing the low.
 
 ```{r}
+DurhamHigh<-c(51,60, 48, 47, 44, 39,37,37,36,49)
+DurhamLow<- c(38,38,40,34,29,28,19,24,29,30)
 
 ```
 
 Now, create two additional vectors that include the ten-day forecast for the high and low temperatures in Celsius. Use a function to create the two new vectors from your existing ones in Fahrenheit.
 
 ```{r}
+FtoC <- function(x){
+  (x-30)/2
+}
+
+DurhamHighC <- FtoC(DurhamHigh)
+DurhamLowC <- FtoC(DurhamLow)
+```
+``` {r}
+#From Autumn Dunn to Everyone:  01:47 PM
+once per machine!
+From Max Hermanson to Everyone:  01:48 PM
+The videos are great
+From Autumn Dunn to Everyone:  02:25 PM
+DurhamHigh<-c(51,60, 48, 47, 44, 39,37,36,49)
+DurhamLow<- c(38,38,40,34,29,28,19,24,29,30)
+DurhamHigh<-c(51,60, 48, 47, 44, 39,37,36,49)
+DurhamLow<- c(38,38,40,34,29,28,19,24,29,30)
+
+DurhamTemp<-data.frame(DurhamHigh,DurhamLow)
+
+x_name <- "High Temperature"
+y_name <- "Low Temperature"
+
+names(DurhamTemp) <- c(x_name, y_name)
+ToCel<- function(x) {
+  (x - 20) / 2
+}
+
+DurhamTempC<-ToCel(DurhamTemp)
+
 
 ```
-
 Combine your four vectors into a data frame and add informative column names.
 
 ```{r}
-
+DurhamTemp <- data.frame(DurhamHigh,DurhamLow,DurhamHighC,DurhamLowC)
+DurhamTemp
 ```
 
 Use the common functions `summary` and `sd` to obtain basic data summaries of the ten-day forecast. How would you call these functions differently for the entire data frame vs. a single column? Attempt to demonstrate both options below.
