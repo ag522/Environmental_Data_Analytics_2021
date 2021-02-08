@@ -90,10 +90,10 @@ summary(Neonics$Species.Common.Name)
 8. Concentrations are always a numeric value. What is the class of Conc.1..Author. in the dataset, and why is it not numeric?
 
 ```{r}
-
+class(Neonics$Conc.1..Author.)
 ```
 
-> Answer:
+> Answer: Conc.1..Author is a factor, it is not numeric because it is a 
 
 
 
@@ -101,7 +101,7 @@ summary(Neonics$Species.Common.Name)
 
 9. Using `geom_freqpoly`, generate a plot of the number of studies conducted by publication year. 
 ```{r}
-
+geom_freqpoly()
 ```
 
 10. Reproduce the same graph but now add a color aesthetic so that different Test.Location are displayed as different colors.
