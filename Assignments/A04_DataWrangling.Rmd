@@ -20,12 +20,46 @@ The completed exercise is due on Tuesday, Feb 16 @ 11:59pm.
 
 ## Set up your session 
 1. Check your working directory, load the `tidyverse` and `lubridate` packages, and upload all four raw data files associated with the EPA Air dataset. See the README file for the EPA air datasets for more information (especially if you have not worked with air quality data previously). 
+``` {r, message = FALSE}
+getwd()
+
+```
+``` {r, message= FALSE}
+#Packages
+library(tidyverse)
+library(lubridate)
+```
+``` {r, message = FALSE}
+# Upload Data Files
+EPAair03_2018 <- read.csv("./Data/Raw/EPAair_O3_NC2018_raw.csv", stringsAsFactors = TRUE)
+EPAair03_2019 <- read.csv("./Data/Raw/EPAair_O3_NC2019_raw.csv", stringsAsFactors = TRUE)
+EPAairPM25_2018 <- read.csv("./Data/Raw/EPAair_PM25_NC2018_raw.csv", stringsAsFactors = TRUE)
+EPAairPM25_2019 <- read.csv("./Data/Raw/EPAair_PM25_NC2019_raw.csv", stringsAsFactors = TRUE)
+
+```
 
 2. Explore the dimensions, column names, and structure of the datasets. 
 
 ```{r, message = FALSE}
-#1
+#1 
+#EPAair03 2018 Data Exploration
+colnames(EPAair03_2018)
+dim(EPAair03_2018)
+str(EPAair03_2018)
+#EPAair03 2019 Data Exploration
+colnames(EPAair03_2019)
+dim(EPAair03_2019)
+str(EPAair03_2019)
 
+#EPAair PM25 2018 Data Exploration
+colnames(EPAairPM25_2018)
+dim(EPAairPM25_2018)
+str(EPAairPM25_2018)
+
+#EPAair PM25 2019 Data Exploration
+colnames(EPAairPM25_2019)
+dim(EPAairPM25_2019)
+str(EPAairPM25_2019)
 #2
 ```
 
@@ -37,10 +71,22 @@ The completed exercise is due on Tuesday, Feb 16 @ 11:59pm.
 
 ```{r}
 #3
+EPAair03_2018$Date <- as.Date(EPAair03_2018$Date, format = "%m/%d/%y") 
+EPAair03_2019$Date <- as.Date(EPAair03_2019$Date, format = "%m/%d/%y")
+EPAairPM25_2018$Date <- as.Date(EPAairPM25_2018$Date, format = "%m/%d/%y")
+EPAairPM25_2019$Date <- as.Date(EPAairPM25_2019$Date, format = "%m/%d/%y")
 
 #4
+EPAair03_2018_selection <- select(EPAair03_2018, Date, DAILY_AQI_VALUE,Site.Name,AQS_PARAMETER_DESC, COUNTY, SITE_LATITUDE, SITE_LONGITUDE )
+
+EPAair03_2019_selection <-select(EPAair03_2019, Date, DAILY_AQI_VALUE,Site.Name,AQS_PARAMETER_DESC, COUNTY, SITE_LATITUDE, SITE_LONGITUDE )
+
+EPAairPM25_2018_selection <- select(EPAairPM25_2018, Date, DAILY_AQI_VALUE,Site.Name,AQS_PARAMETER_DESC, COUNTY, SITE_LATITUDE, SITE_LONGITUDE )
+
+EPAairPM25_2019_selection <- select(EPAairPM25_2019, Date, DAILY_AQI_VALUE,Site.Name,AQS_PARAMETER_DESC, COUNTY, SITE_LATITUDE, SITE_LONGITUDE )
 
 #5
+
 
 #6
 
