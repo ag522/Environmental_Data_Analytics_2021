@@ -28,13 +28,16 @@ getwd()
 #Packages
 library(tidyverse)
 library(lubridate)
+#install.packages("plyr")
+#library(plyr)
+library(dplyr)
 ```
 ``` {r, message = FALSE}
 # Upload Data Files
-EPAair03_2018 <- read.csv("./Data/Raw/EPAair_O3_NC2018_raw.csv", stringsAsFactors = TRUE)
-EPAair03_2019 <- read.csv("./Data/Raw/EPAair_O3_NC2019_raw.csv", stringsAsFactors = TRUE)
-EPAairPM25_2018 <- read.csv("./Data/Raw/EPAair_PM25_NC2018_raw.csv", stringsAsFactors = TRUE)
-EPAairPM25_2019 <- read.csv("./Data/Raw/EPAair_PM25_NC2019_raw.csv", stringsAsFactors = TRUE)
+EPAair03_2018 <- read.csv("./Data/Raw/EPAair_O3_NC2018_raw.csv", stringsAsFactors = FALSE)
+EPAair03_2019 <- read.csv("./Data/Raw/EPAair_O3_NC2019_raw.csv", stringsAsFactors = FALSE)
+EPAairPM25_2018 <- read.csv("./Data/Raw/EPAair_PM25_NC2018_raw.csv", stringsAsFactors = FALSE)
+EPAairPM25_2019 <- read.csv("./Data/Raw/EPAair_PM25_NC2019_raw.csv", stringsAsFactors = FALSE)
 
 ```
 
@@ -71,10 +74,10 @@ str(EPAairPM25_2019)
 
 ```{r}
 #3
-EPAair03_2018$Date <- as.Date(EPAair03_2018$Date, format = "%m/%d/%y") 
-EPAair03_2019$Date <- as.Date(EPAair03_2019$Date, format = "%m/%d/%y")
-EPAairPM25_2018$Date <- as.Date(EPAairPM25_2018$Date, format = "%m/%d/%y")
-EPAairPM25_2019$Date <- as.Date(EPAairPM25_2019$Date, format = "%m/%d/%y")
+EPAair03_2018$Date <- as.Date(EPAair03_2018$Date, format = "%m/%d/%Y") 
+EPAair03_2019$Date <- as.Date(EPAair03_2019$Date, format = "%m/%d/%Y")
+EPAairPM25_2018$Date <- as.Date(EPAairPM25_2018$Date, format = "%m/%d/%Y")
+EPAairPM25_2019$Date <- as.Date(EPAairPM25_2019$Date, format = "%m/%d/%Y")
 
 #4
 EPAair03_2018_selection <- select(EPAair03_2018, Date, DAILY_AQI_VALUE,Site.Name,AQS_PARAMETER_DESC, COUNTY, SITE_LATITUDE, SITE_LONGITUDE )
@@ -106,35 +109,23 @@ write.csv(EPAairPM25_2019_selection, row.names = FALSE, file = "./Data/Processed
 * Add columns for "Month" and "Year" by parsing your "Date" column (hint: `lubridate` package)
 * Hint: the dimensions of this dataset should be 14,752 x 9.
 
-9. Spread your datasets such that AQI values for ozone and PM2.5 are in separate columns. Each location on a specific date should now occupy only one row.
+9. Spread your datasets such that AQI values for ozone and PM2.5 are in separate columns. Each location on a specific date should now occupy only one row.(pm get processed once)
 
 10. Call up the dimensions of your new tidy dataset.
 11. Save your processed dataset with the following file name: "EPAair_O3_PM25_NC1718_Processed.csv"
 
 ```{r}
 #7
-#First check that col names match
-colnames(EPAair03_2018)==colnames(EPAair03_2019)
-colnames(EPAairPM25_2018) == colnames(EPAairPM25_2019)
-colnames(EPAair03_2018)== colnames(EPAairPM25_2018)
-#They did not we need to rename the Daily.Max.8.hOUr.Ozone.Concentration and  Daily.Mean.PM2.5.Concentration because I don-t think I will be using it I will just remove them
-#EPAair03_2018_noDailyValue <- select(EPAair03_2018, -Daily.Max.8.hour.Ozone.Concentration)
-#EPAair03_2019_noDailyValue <- select(EPAair03_2019, -Daily.Max.8.hour.Ozone.Concentration)
-#EPAairPM25_2018_noDailyValue <- select(EPAairPM25_2018, -Daily.Mean.PM2.5.Concentration)
-#EPAairPM25_2019_noDailyValue <- select(EPAairPM25_2019, -Daily.Mean.PM2.5.Concentration)
-#Now we combine the datasets
-#EPAair_All <- rbind(EPAair03_2018_noDailyValue,EPAair03_2019_noDailyValue,EPAairPM25_2018_noDailyValue,EPAairPM25_2019_noDailyValue)
-EPAair03_2018 <- mutate(EPAair03_2018, Daily.Mean.PM2.5.Concentration = "NA" )
-EPAair03_2019 <- mutate(EPAair03_2019, Daily.Mean.PM2.5.Concentration = "NA" )
-EPAairPM25_2018 <- mutate(EPAairPM25_2018, Daily.Max.8.hour.Ozone.Concentration = "NA" )
-EPAairPM25_2019 <- mutate(EPAairPM25_2019, Daily.Max.8.hour.Ozone.Concentration = "NA" )
 
-EPAair_All <- rbind(EPAair03_2018,EPAair03_2019,EPAairPM25_2018,EPAairPM25_2019)
+
+EPAair_All <- rbind(EPAair03_2018_selection,EPAair03_2019_selection,EPAairPM25_2018_selection,EPAairPM25_2019_selection)
+
 
 #8
+
 EPAair_wrangle <- EPAair_All %>% 
   filter(Site.Name %in% c("Linville Falls", "Durham Armory", "Leggett", "Hattie Avenue", "Clemmons Middle", "Mendenhall School", "Frying Pan Mountain", "West Johnston Co.", "Garinger High School", "Castle Hayne", "Pitt Agri. Center", "Bryson City", "Millbrook School")) %>% 
-  group_by(Date,Site.ID,AQS_PARAMETER_CODE,COUNTY) %>%
+  group_by(Date, Site.Name, AQS_PARAMETER_DESC,COUNTY) %>%
   summarise(meanAQ_VALUE = mean(DAILY_AQI_VALUE),
             meanLat = mean(SITE_LATITUDE),
             meanLong = mean(SITE_LATITUDE)) %>%
@@ -144,13 +135,13 @@ dim(EPAair_wrangle)
 
 
 #9
-EPAair_All.spread <- pivot_wider(EPAair_All, names_from = AQS_PARAMETER_DESC, values_from = DAILY_AQI_VALUE)
+EPAair_wrangle.spread <- pivot_wider(EPAair_wrangle, names_from = AQS_PARAMETER_DESC, values_from = meanAQ_VALUE)
 
-write.csv(EPAair_All, row.names = FALSE, file= "./Assignments/test.csv")
 #10
+dim(EPAair_wrangle.spread)
 
 #11
-
+write.csv(EPAair_wrangle.spread,row.names =FALSE, file ="./Data/Processed/EPAair_O3_PM25_NC1718_Processed.csv")
 ```
 
 
@@ -161,13 +152,21 @@ write.csv(EPAair_All, row.names = FALSE, file= "./Assignments/test.csv")
 
 ```{r}
 #12a
+Summary.12a <- EPAair_wrangle.spread %>%
+  group_by(Site.Name,month,year) %>%
+  summarise(meanAQI.O3 = mean(Ozone),
+            meanAQI.PM25 = mean(PM2.5))
 
 #12b
+Summary.12b <- Summary.12a %>%
+  drop_na(month, year)
 
+Test.omit <- Summary.12a %>%
+  na.omit(month,year)
 #13
-
+dim(Summary.12b)
 ```
 
 14. Why did we use the function `drop_na` rather than `na.omit`?
 
-> Answer: 
+> Answer: Becuase if we use na.omit all rows that have an NA value will be removed, this means that the only rows remaining are those that have both 03 and PM25 values.
