@@ -1,6 +1,6 @@
 ---
 title: "Assignment 5: Data Visualization"
-author: "Student Name"
+author: "Andrea Gonzalez Natera"
 output: pdf_document
 geometry: margin=2.54cm
 editor_options: 
@@ -34,8 +34,17 @@ the processed data file for the Niwot Ridge litter dataset.
 
 ```{r}
 #1 
+getwd()
+library(tidyverse)
+library(lubridate)
+library(cowplot)
+
+LakeChemistry.PeterPaul <- read.csv("./Data/Processed/NTL-LTER_Lake_Chemistry_Nutrients_PeterPaul_Processed.csv", stringsAsFactors = TRUE)
+LakeNutrients.PeterPaul <- read.csv("./Data/Processed/NTL-LTER_Lake_Nutrients_PeterPaulGathered_Processed.csv", stringsAsFactors = TRUE)
 
 #2 
+LakeChemistry.PeterPaul$sampledate <-as.Date(LakeChemistry.PeterPaul$sampledate, format = "%Y-%m-%d")
+LakeNutrients.PeterPaul$sampledate <-as.Date(LakeNutrients.PeterPaul$sampledate, format = "%Y-%m-%d")
 
 ```
 ## Define your theme
