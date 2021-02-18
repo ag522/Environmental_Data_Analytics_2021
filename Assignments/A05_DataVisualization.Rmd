@@ -41,17 +41,24 @@ library(cowplot)
 
 LakeChemistry.PeterPaul <- read.csv("./Data/Processed/NTL-LTER_Lake_Chemistry_Nutrients_PeterPaul_Processed.csv", stringsAsFactors = TRUE)
 LakeNutrients.PeterPaul <- read.csv("./Data/Processed/NTL-LTER_Lake_Nutrients_PeterPaulGathered_Processed.csv", stringsAsFactors = TRUE)
+NTL
 
 #2 
 LakeChemistry.PeterPaul$sampledate <-as.Date(LakeChemistry.PeterPaul$sampledate, format = "%Y-%m-%d")
 LakeNutrients.PeterPaul$sampledate <-as.Date(LakeNutrients.PeterPaul$sampledate, format = "%Y-%m-%d")
-
+LakeChemistry.PeterPaul$month <- month(LakeChemistry.PeterPaul$month, label = TRUE)
 ```
 ## Define your theme
 3. Build a theme and set it as your default theme.
 
 ```{r}
-
+mytheme <- theme_light(base_size = 15) +
+  theme(axis.text = element_text(color = "black"),
+        legend.position = "bottom",
+        legend.text = element_text(size = 10), 
+        legend.title = element_text(size = 12),
+        plot.title = element_text(hjust = 0.5))
+        
 
 ```
 
@@ -62,22 +69,66 @@ For numbers 4-7, create ggplot graphs and adjust aesthetics to follow best pract
 
 ```{r}
 
-
+plot1 <- ggplot(LakeChemistry.PeterPaul,aes(x = po4, y= tp_ug,
+  shape = lakename))+
+  geom_point(size = 3) +
+  xlim(0,50) +
+  ylim(0,150) +
+  labs(y = "Phosphorus", x= "Phosphate", shape = "Lake") +
+  geom_smooth(method = lm, se=FALSE, color="black", aes(group = 1)) +
+  ggtitle("Total Phosphorus by Phosphate")+
+  mytheme
+print(plot1)
 ```
 
 
 5. [NTL-LTER] Make three separate boxplots of (a) temperature, (b) TP, and (c) TN, with month as the x axis and lake as a color aesthetic. Then, create a cowplot that combines the three graphs. Make sure that only one legend is present and that graph axes are aligned.
 
 ```{r}
+boxplot1 <- ggplot(LakeChemistry.PeterPaul,aes(x = month, y =temperature_C)) +
+ geom_boxplot (aes(color = lakename))+
+  labs(y = "Temperature C", x= "Month", shape = "Lake")+
+  mytheme
+print(boxplot1)
+
+boxplot2 <- ggplot(LakeChemistry.PeterPaul,aes(x = month, y =tp_ug)) +
+  geom_boxplot(aes(color = lakename))+
+  labs(y = "TP (ug)", x= "Month", shape = "Lake")+
+  mytheme
+print(boxplot2)
+
+boxplot3 <- ggplot(LakeChemistry.PeterPaul,aes(x = month, y =tn_ug)) +
+  geom_boxplot(aes(color = lakename))+
+  labs(y = "TN (ug)", x= "Month", shape = "Lake")+
+  mytheme
+print(boxplot3)
+
+legend_bp1 <- get_legend(boxplot1 +
+                           guides(color = guide_legend(nrow = 1))
+                         + theme(legend.position = "bottom"))
+
+plot_grid(boxplot1 + theme(legend.position = "none"), 
+          boxplot2 + theme(legend.position = "none"),
+          boxplot3 + theme(legend.position = "none"),
+          legend_bp1,
+          align = 'v',
+          nrow = 4,
+          ncol = 1,
+          rel_heights = c(1,1,1),
+          axis = "b")
+
 
 
 ```
 
 Question: What do you observe about the variables of interest over seasons and between lakes? 
 
-> Answer: 
+> Answer: Temperature seems to be very similar between lakes and is higher on the summer months (Jun, July and August). TP seemes to have higher values in Peter Lake. Tp is very stable in Paul Lake throughout the year but in Peter lake we can see increase of TP over the summer. Fianlly TN seems to be fairly stable through time and similar in Paul and Peter lake. 
 
 6. [Niwot Ridge] Plot a subset of the litter dataset by displaying only the "Needles" functional group. Plot the dry mass of needle litter by date and separate by NLCD class with a color aesthetic. (no need to adjust the name of each land use)
+```{r}
+plot2<- ggplot()
+```
 
 7. [Niwot Ridge] Now, plot the same plot but with NLCD classes separated into three facets rather than separated by color. 
 
