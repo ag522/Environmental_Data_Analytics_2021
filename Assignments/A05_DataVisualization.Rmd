@@ -40,13 +40,19 @@ library(lubridate)
 library(cowplot)
 
 LakeChemistry.PeterPaul <- read.csv("./Data/Processed/NTL-LTER_Lake_Chemistry_Nutrients_PeterPaul_Processed.csv", stringsAsFactors = TRUE)
+
 LakeNutrients.PeterPaul <- read.csv("./Data/Processed/NTL-LTER_Lake_Nutrients_PeterPaulGathered_Processed.csv", stringsAsFactors = TRUE)
-NTL
+
+NiwotRidge <- read.csv("./Data/Processed/NEON_NIWO_Litter_mass_trap_Processed.csv", stringsAsFactors = TRUE) 
 
 #2 
 LakeChemistry.PeterPaul$sampledate <-as.Date(LakeChemistry.PeterPaul$sampledate, format = "%Y-%m-%d")
+
 LakeNutrients.PeterPaul$sampledate <-as.Date(LakeNutrients.PeterPaul$sampledate, format = "%Y-%m-%d")
+
 LakeChemistry.PeterPaul$month <- month(LakeChemistry.PeterPaul$month, label = TRUE)
+
+NiwotRidge$collectDate <- as.Date(NiwotRidge$collectDate, format = "%Y-%m-%d")
 ```
 ## Define your theme
 3. Build a theme and set it as your default theme.
@@ -127,12 +133,28 @@ Question: What do you observe about the variables of interest over seasons and b
 
 6. [Niwot Ridge] Plot a subset of the litter dataset by displaying only the "Needles" functional group. Plot the dry mass of needle litter by date and separate by NLCD class with a color aesthetic. (no need to adjust the name of each land use)
 ```{r}
-plot2<- ggplot()
+plot2<- ggplot(subset(NiwotRidge, functionalGroup == "Needles"),
+  aes(x = collectDate, y = dryMass, color = nlcdClass))+
+  geom_point(size = 3) +
+  labs(y = "Dry Mass", x= "Date", color = "NLCD") +
+  ggtitle("Needle Dry Mass through time")+
+  mytheme
+                
+print(plot2)
 ```
 
 7. [Niwot Ridge] Now, plot the same plot but with NLCD classes separated into three facets rather than separated by color. 
 
 ```{r}
-
+plot3<- ggplot(subset(NiwotRidge, functionalGroup == "Needles"),
+  aes(x= collectDate, y= dryMass))+
+  facet_wrap(vars(nlcdClass), nrow = 1)+
+  geom_point(size = 3)+
+  labs(y = "Dry Mass", x= "Date") +
+  ggtitle("Needle Dry Mass through time")+
+  mytheme
+print(plot3)
+  
+  
 ```
 
