@@ -76,11 +76,11 @@ For numbers 4-7, create ggplot graphs and adjust aesthetics to follow best pract
 ```{r}
 
 plot1 <- ggplot(LakeChemistry.PeterPaul,aes(x = po4, y= tp_ug,
-  shape = lakename))+
-  geom_point(size = 3) +
-  xlim(0,50) +
+  color = lakename))+
+  geom_point(size = 3.5) +
+  xlim(0,45) +
   ylim(0,150) +
-  labs(y = "Phosphorus", x= "Phosphate", shape = "Lake") +
+  labs(y = "Phosphorus", x= "Phosphate", color = "Lake:") +
   geom_smooth(method = lm, se=FALSE, color="black", aes(group = 1)) +
   ggtitle("Total Phosphorus by Phosphate")+
   mytheme
@@ -93,25 +93,28 @@ print(plot1)
 ```{r}
 boxplot1 <- ggplot(LakeChemistry.PeterPaul,aes(x = month, y =temperature_C)) +
  geom_boxplot (aes(color = lakename))+
-  labs(y = "Temperature C", x= "Month", shape = "Lake")+
+  labs(y = "Temperature C", x= "Month", color = "Lakes:")+
   mytheme
 print(boxplot1)
 
 boxplot2 <- ggplot(LakeChemistry.PeterPaul,aes(x = month, y =tp_ug)) +
   geom_boxplot(aes(color = lakename))+
-  labs(y = "TP (ug)", x= "Month", shape = "Lake")+
+  labs(y = "TP (ug)", x= "Month", color = "Lakes:")+
+   ylim(0,40) +
   mytheme
 print(boxplot2)
 
 boxplot3 <- ggplot(LakeChemistry.PeterPaul,aes(x = month, y =tn_ug)) +
   geom_boxplot(aes(color = lakename))+
-  labs(y = "TN (ug)", x= "Month", shape = "Lake")+
+  labs(y = "TN (ug)", x= "Month", color = "Lakes:")+
+  ylim(45,750) +
   mytheme
 print(boxplot3)
 
 legend_bp1 <- get_legend(boxplot1 +
                            guides(color = guide_legend(nrow = 1))
-                         + theme(legend.position = "bottom"))
+                         + theme(legend.position = "bottom")+
+                           labs(color = "Lakes:"))
 
 plot_grid(boxplot1 + theme(legend.position = "none"), 
           boxplot2 + theme(legend.position = "none"),
@@ -120,7 +123,7 @@ plot_grid(boxplot1 + theme(legend.position = "none"),
           align = 'v',
           nrow = 4,
           ncol = 1,
-          rel_heights = c(1,1,1),
+          rel_heights = c(2,2,2,0.25),
           axis = "b")
 
 
@@ -136,7 +139,8 @@ Question: What do you observe about the variables of interest over seasons and b
 plot2<- ggplot(subset(NiwotRidge, functionalGroup == "Needles"),
   aes(x = collectDate, y = dryMass, color = nlcdClass))+
   geom_point(size = 3) +
-  labs(y = "Dry Mass", x= "Date", color = "NLCD") +
+   ylim(0,50) +
+  labs(y = "Dry Mass", x= "Date", color = "NLCD:") +
   ggtitle("Needle Dry Mass through time")+
   mytheme
                 
@@ -148,8 +152,9 @@ print(plot2)
 ```{r}
 plot3<- ggplot(subset(NiwotRidge, functionalGroup == "Needles"),
   aes(x= collectDate, y= dryMass))+
-  facet_wrap(vars(nlcdClass), nrow = 1)+
+  facet_wrap(vars(nlcdClass), nrow = 3)+
   geom_point(size = 3)+
+  ylim(0,50) +
   labs(y = "Dry Mass", x= "Date") +
   ggtitle("Needle Dry Mass through time")+
   mytheme
@@ -159,4 +164,4 @@ print(plot3)
 ```
 Question: Which of these plots (6 vs. 7) do you think is more effective, and why? 
 
-> Answer:
+> Answer: I think plot 7 is more effective because it is easier to distinguish the different needle dry mass patters for each NLCD class.
