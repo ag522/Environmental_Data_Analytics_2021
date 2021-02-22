@@ -157,4 +157,6 @@ print(plot3)
   
   
 ```
+Question: Which of these plots (6 vs. 7) do you think is more effective, and why? 
 
+> Answer:
