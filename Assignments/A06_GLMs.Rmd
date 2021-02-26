@@ -1,6 +1,6 @@
 ---
 title: "Assignment 7: GLMs (Linear Regressios, ANOVA, & t-tests)"
-author: "Student Name"
+author: "Andrea Gonzalez Natera"
 output: pdf_document
 geometry: margin=2.54cm
 editor_options: 
@@ -23,14 +23,36 @@ The completed exercise is due on Tuesday, March 2 at 1:00 pm.
 ## Set up your session 
 1. Set up your session. Check your working directory. Load the tidyverse, agricolae and other needed packages. Import the *raw* NTL-LTER raw data file for chemistry/physics (`NTL-LTER_Lake_ChemistryPhysics_Raw.csv`). Set date columns to date objects.
 
+
 2. Build a ggplot theme and set it as your default theme.
 
 ```{r setup}
 #1
+#Working Directory
+getwd()
+#Packages
+install.packages("tidyverse")
+library(tidyverse)
+library(agricolae)
+#install.packages("lubridate")
+library(lubridate)
+library(dplyr)
+install.packages("cowplot")
+library(cowplot)
+#Data Import
+NTL <- read.csv("./Data/Raw/NTL-LTER_Lake_ChemistryPhysics_Raw.csv", stringsAsFactors = FALSE)
+#Setting date objects
+NTL$sampledate <- as.Date(NTL$sampledate,"%m/%d/%y")
 
 
 #2
-
+mytheme <- theme_light(base_size = 15) +
+  theme(axis.text = element_text(color = "black"),
+        legend.position = "bottom",
+        legend.text = element_text(size = 10), 
+        legend.title = element_text(size = 12),
+        plot.title = element_text(hjust = 0.5))
+theme_set(mytheme)
 
 ```
 
@@ -38,9 +60,9 @@ The completed exercise is due on Tuesday, March 2 at 1:00 pm.
 Our first research question is: Does mean lake temperature recorded during July change with depth across all lakes?
 
 3. State the null and alternative hypotheses for this question:
-> Answer:
-H0: 
-Ha: 
+> Answer: 
+H0: Mean lake temperature recorded in July does not change with depth across all lakes
+Ha: Mean lake temperature recorded in July changes with depth across all lakes
 
 
 4.  Wrangle your NTL-LTER dataset with a pipe function so that the records meet the following criteria: 
@@ -52,9 +74,23 @@ Ha:
 
 ```{r scatterplot}
 #4
+NTL_clean <- NTL %>% 
+  mutate(month = month(sampledate)) %>%
+  filter(month == 7) %>%
+  select(lakename, year4, daynum, depth, temperature_C)%>%
+  na.omit()
 
 
 #5
+plot1 <- ggplot(NTL_clean,aes(x = depth, y = temperature_C))+
+  geom_point(size = 2.5)+
+  ylim(0,35) +
+  labs(y = "Temperature (C)", x= "Depth") +
+  ggtitle("Water Temperature by Depth")+
+  geom_smooth(method = lm, se=FALSE, color="black") +
+  mytheme
+print(plot1)
+
 
 
 ```
@@ -63,13 +99,16 @@ Ha:
 6. Interpret the figure. What does it suggest with regards to the response of temperature to depth? Do the distribution of points suggest about anything about the linearity of this trend?
 
 > Answer: 
+There seems to be an inverse relationship between water depth and water temperature.  The distribution of points suggest that the relationship is polynomial. 
 
 
 7. Perform a linear regression to test the relationship and display the results
 
 ```{r linear.regression}
 #7
-
+TempDepth.regression <- lm(data = NTL_clean, temperature_C ~ depth)
+summary(TempDepth.regression)
+cor.test(NTL_clean$temperature_C, NTL_clean$depth)
 
 ```
 
@@ -91,10 +130,12 @@ Let's tackle a similar question from a different approach. Here, we want to expl
 
 ```{r temperature.model}
 #9
-
+TempModel <- lm (data = NTL_clean, temperature_C ~ depth + year4 + daynum )
+summary(TempModel)
 
 
 #10
+
 
 
 ```
