@@ -61,7 +61,7 @@ Our first research question is: Does mean lake temperature recorded during July 
 
 3. State the null and alternative hypotheses for this question:
 > Answer: 
-H0: Mean lake temperature recorded in July does not change with depth across all lakes
+H0: There ins no correlation between mean lake temperature recorded in July and lake depth across all lakes.
 Ha: Mean lake temperature recorded in July changes with depth across all lakes
 
 
@@ -99,7 +99,7 @@ print(plot1)
 6. Interpret the figure. What does it suggest with regards to the response of temperature to depth? Do the distribution of points suggest about anything about the linearity of this trend?
 
 > Answer: 
-There seems to be an inverse relationship between water depth and water temperature.  The distribution of points suggest that the relationship is polynomial. 
+There seems to be a negative correlation  between water depth and water temperature.  The distribution of points suggest that the relationship is polynomial. 
 
 
 7. Perform a linear regression to test the relationship and display the results
@@ -113,9 +113,9 @@ cor.test(NTL_clean$temperature_C, NTL_clean$depth)
 ```
 
 
-8. Interpret your model results in words. Include how much of the variability in temperature is explained by changes in depth, the degrees of freedom on which this finding is based, and the statistical significance of the result. Also mention how much temperature is predicted to change for every 1m change in depth. 
+8. Interpret your model results in words. Include how much of the variability in temperature is explained by changes in depth, the degrees of freedom on which this finding is based, and the statistical significance of the result. Also mention how much temperature is predicted to change for every 1m change in depth. The result is very statistically significant.
 
-> Answer:
+> Answer: There is a negative correlation between mean temperature and depth.For every meter change in depth there is a change of -1.94 degrees in temperature. Up to 73.87% of the variability in temperature can be explained by changes in depth using 0726 deggrees of freedom.  
 
 
 ---
@@ -135,6 +135,9 @@ summary(TempModel)
 
 
 #10
+TempRegression <- lm (data = NTL_clean, temperature_C ~ depth + daynum )
+summary(TempRegression)
+
 
 
 
@@ -143,7 +146,7 @@ summary(TempModel)
 11. What is the final set of explanatory variables that the AIC method suggests we use to predict temperature in our multiple regression? How much of the observed variance does this model explain? Is this an improvement over the model using only depth as the explanatory variable?
 
 > Answer: 
-
+The final set of explanatory variables are depth and daynum. This model explains 74% of the observed variance. It is a small improvement  over the model using only depth as the explanatory variable but nothing very significant.
 
 
 ---
@@ -153,28 +156,39 @@ summary(TempModel)
 
 ```{r anova.model}
 #12
+Temp.Lakes.anova1 <- aov(data = NTL_clean, temperature_C ~ lakename)
+summary(Temp.Lakes.anova1)
 
-
+Temp.Lakes.anova2 <- lm(data = NTL_clean, temperature_C ~ lakename)
+summary(Temp.Lakes.anova2)
 ```
 
 13. Is there a significant difference in mean temperature among the lakes? Report your findings. 
 
 > Answer: 
-
+There is a statistical significant difference in mean temperature among lakes
 
 
 14. Create a graph that depicts temperature by depth, with a separate color for each lake. Add a geom_smooth (method = "lm", se = FALSE) for each lake. Make your points 50 % transparent. Adjust your y axis limits to go from 0 to 35 degrees. Clean up your graph to make it pretty. 
 
 ```{r scatterplot.2}
 #14.
-
-
+MeanTempPlot <- ggplot(NTL_clean, aes(x = depth, y = temperature_C, color = lakename))+
+  geom_point(alpha = 0.5 )+
+  ylim(0,35) +
+  xlim(0,15) +
+  labs(y = "Temperature (C)", x= "Depth (m)") +
+  ggtitle("Water Temperature by Depth")+
+  geom_smooth(method = lm, se=FALSE) +
+  mytheme
+print(MeanTempPlot)
 ```
 
 15. Use the Tukey's HSD test to determine which lakes have different means.
 
 ```{r tukey.test}
 #15
+TukeyHSD(Temp.Lakes.anova)
 
 
 ```
@@ -182,11 +196,11 @@ summary(TempModel)
 16.From the findings above, which lakes have the same mean temperature, statistically speaking, as Peter Lake? Does any lake have a mean temperature that is statistically distinct from all the other lakes?
 
 >Answer:
-
+Paul lake and Ward Lake have statistically similar mean temperatures than Peter lake. 
+ Central Long lake's mean temperature is statistically different from all other lakes. 
  
-
 17. If we were just looking at Peter Lake and Paul Lake. What's another test we might explore to see whether they have distinct mean temperatures? 
 
->Answer: 
+>Answer: We might do a two independent sample t-test
 
 
