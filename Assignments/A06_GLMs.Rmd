@@ -132,10 +132,12 @@ Let's tackle a similar question from a different approach. Here, we want to expl
 #9
 TempModel <- lm (data = NTL_clean, temperature_C ~ depth + year4 + daynum )
 summary(TempModel)
+step(TempModel)
+
 
 
 #10
-TempRegression <- lm (data = NTL_clean, temperature_C ~ depth + daynum )
+TempRegression <- lm (data = NTL_clean, temperature_C ~ depth + year4 + daynum )
 summary(TempRegression)
 
 
@@ -146,7 +148,7 @@ summary(TempRegression)
 11. What is the final set of explanatory variables that the AIC method suggests we use to predict temperature in our multiple regression? How much of the observed variance does this model explain? Is this an improvement over the model using only depth as the explanatory variable?
 
 > Answer: 
-The final set of explanatory variables are depth and daynum. This model explains 74% of the observed variance. It is a small improvement  over the model using only depth as the explanatory variable but nothing very significant.
+The final set of explanatory variables are depth year4 and daynum. This model explains 74% of the observed variance. It is a small improvement  over the model using only depth as the explanatory variable but nothing very significant.
 
 
 ---
@@ -201,6 +203,6 @@ Paul lake and Ward Lake have statistically similar mean temperatures than Peter 
  
 17. If we were just looking at Peter Lake and Paul Lake. What's another test we might explore to see whether they have distinct mean temperatures? 
 
->Answer: We might do a two independent sample t-test
+>Answer: We might do a two sample t-test
 
 
