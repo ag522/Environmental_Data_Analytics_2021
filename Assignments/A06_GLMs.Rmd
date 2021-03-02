@@ -31,13 +31,13 @@ The completed exercise is due on Tuesday, March 2 at 1:00 pm.
 #Working Directory
 getwd()
 #Packages
-install.packages("tidyverse")
+#install.packages("tidyverse")
 library(tidyverse)
 library(agricolae)
 #install.packages("lubridate")
 library(lubridate)
 library(dplyr)
-install.packages("cowplot")
+#install.packages("cowplot")
 library(cowplot)
 #Data Import
 NTL <- read.csv("./Data/Raw/NTL-LTER_Lake_ChemistryPhysics_Raw.csv", stringsAsFactors = FALSE)
@@ -62,7 +62,7 @@ Our first research question is: Does mean lake temperature recorded during July 
 3. State the null and alternative hypotheses for this question:
 > Answer: 
 H0: There ins no correlation between mean lake temperature recorded in July and lake depth across all lakes.
-Ha: Mean lake temperature recorded in July changes with depth across all lakes
+Ha: Mean lake temperature recorded in July changes with depth across some lakes
 
 
 4.  Wrangle your NTL-LTER dataset with a pipe function so that the records meet the following criteria: 
@@ -82,12 +82,14 @@ NTL_clean <- NTL %>%
 
 
 #5
+
+
 plot1 <- ggplot(NTL_clean,aes(x = depth, y = temperature_C))+
   geom_point(size = 2.5)+
   ylim(0,35) +
   labs(y = "Temperature (C)", x= "Depth") +
   ggtitle("Water Temperature by Depth")+
-  geom_smooth(method = lm, se=FALSE, color="black") +
+  geom_smooth(method = lm, se=FALSE, color="black")+
   mytheme
 print(plot1)
 
@@ -108,14 +110,14 @@ There seems to be a negative correlation  between water depth and water temperat
 #7
 TempDepth.regression <- lm(data = NTL_clean, temperature_C ~ depth)
 summary(TempDepth.regression)
-cor.test(NTL_clean$temperature_C, NTL_clean$depth)
+
 
 ```
 
 
 8. Interpret your model results in words. Include how much of the variability in temperature is explained by changes in depth, the degrees of freedom on which this finding is based, and the statistical significance of the result. Also mention how much temperature is predicted to change for every 1m change in depth. The result is very statistically significant.
 
-> Answer: There is a negative correlation between mean temperature and depth.For every meter change in depth there is a change of -1.94 degrees in temperature. Up to 73.87% of the variability in temperature can be explained by changes in depth using 0726 deggrees of freedom.  
+> Answer: There is a negative correlation between mean temperature and depth.For every meter change in depth there is a change of -1.94 degrees in temperature. Up to 73.87% of the variability in temperature can be explained by changes in depth using 9726 deggrees of freedom.  
 
 
 ---
@@ -190,7 +192,9 @@ print(MeanTempPlot)
 
 ```{r tukey.test}
 #15
-TukeyHSD(Temp.Lakes.anova)
+TukeyHSD(Temp.Lakes.anova1)
+Lakes.groups <- HSD.test(Temp.Lakes.anova1, "lakename", group = TRUE)
+Lakes.groups
 
 
 ```
@@ -199,7 +203,7 @@ TukeyHSD(Temp.Lakes.anova)
 
 >Answer:
 Paul lake and Ward Lake have statistically similar mean temperatures than Peter lake. 
- Central Long lake's mean temperature is statistically different from all other lakes. 
+ Central Long lake's mean temperature is statistically different from all other lakes but it is closest to Crampton Lake.
  
 17. If we were just looking at Peter Lake and Paul Lake. What's another test we might explore to see whether they have distinct mean temperatures? 
 
